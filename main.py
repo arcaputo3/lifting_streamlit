@@ -44,7 +44,7 @@ def parse_workout_string(workout_string: str) -> Dict[str, Any]:
             if times in entry:
                 entry = entry.split(times)
                 curr_set = {
-                    'weight': int(entry[0][7:-3]),
+                    'weight': int(entry[0][7:-3]),  # pounds by default
                 }
                 if wu_str in entry[-1]:
                     curr_set['reps'] = int(entry[-1][-2 - len(wu_str):-len(wu_str)])
@@ -65,7 +65,7 @@ def parse_workout_string(workout_string: str) -> Dict[str, Any]:
             elif cardio in entry:
                 entry = entry.split(cardio)
                 curr_set = {
-                    'distance': entry[0][7:-3],
+                    'distance': float(entry[0][7:-4]),  # miles by default
                     'time': entry[-1][1:]
                 }
             else:
