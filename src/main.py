@@ -1,7 +1,7 @@
 # This is a project for tracking, plotting, and optimizing workout progress
 import os
 import json
-from typing import Any, Dict
+from typing import Any, Dict, List, Union
 
 # TODO: Add docstrings
 # TODO: Enable routing instead of if-elif`s
@@ -25,7 +25,7 @@ def parse_workout_string(workout_string: str) -> Dict[str, Any]:
     ]
     exercises = []
 
-    def init_curr_exercise() -> dict:
+    def init_curr_exercise() -> Dict[str, Union[List, str]]:
         return {'sets': []}
 
     curr_exercise = init_curr_exercise()
@@ -86,15 +86,17 @@ def parse_workout_string(workout_string: str) -> Dict[str, Any]:
     return output_data
 
 
-def workouts_txt_to_json(txt_path: str = 'workouts', json_path: str = 'processed_data/workouts.json'):
-    all_workout_data = []
-    for workout_file in os.listdir(txt_path):
-        all_workout_data.append(parse_workout_string(file_to_string(f'{txt_path}/{workout_file}')))
+def workouts_txt_to_json(txt_path: str, json_path: str):
+    print(os.listdir())
+    all_workout_data = [
+        parse_workout_string(file_to_string(f'{txt_path}/{workout_file}'))
+        for workout_file in sorted(os.listdir(txt_path))
+    ]
     print(f"Processed {len(all_workout_data)} workouts! Saving to json...")
     with open(json_path, 'w', encoding='utf-8') as output_file:
-        json.dump(all_workout_data, output_file, ensure_ascii=False, indent=4)
+        json.dump(all_workout_data, output_file, ensure_ascii=False, indent=4, sort_keys=True)
     print("Done!")
 
 
 if __name__ == '__main__':
-    workouts_txt_to_json()
+    workouts_txt_to_json('workouts', 'processed_data/workouts.json')
