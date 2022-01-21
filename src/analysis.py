@@ -5,6 +5,10 @@ import pandas as pd
 
 from typing import List, Dict
 
+# from main import *
+
+# TODO: Add utils.py
+
 def exercise_volume_map(data: List[Dict[str, int]]) -> List[int]:
     return [
         max(d.get('weight', 0), 1) * d.get('reps', 0)
@@ -18,14 +22,14 @@ with open('processed_data/workouts.json', 'r') as file:
 all_exercises = pd.concat([pd.DataFrame(entry['exercises']) for entry in workout_json_data if 'exercises' in entry])
 
 if __name__ == "__main__":
-    x = 25
+    x = 50
     volume = all_exercises['sets'].apply(exercise_volume_map).apply(sum).to_frame().set_index(all_exercises['name'])
     volume = volume.reset_index().groupby('name').sum()
     top_exercises = all_exercises.groupby('name')['sets'].count()
     print(volume)
     print(top_exercises)
 
-    top_exercises.sort_values().iloc[-x:-1].plot(figsize=(10, 8), kind='barh')
+    top_exercises.sort_values().iloc[-x:].plot(figsize=(10, 8), kind='barh')
     plt.xlabel('Frequency')
     plt.ylabel('Exercise')
     plt.title(f'Top {x} Exercises by Workout Frequency')

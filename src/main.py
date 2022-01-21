@@ -1,6 +1,7 @@
 # This is a project for tracking, plotting, and optimizing workout progress
 import os
 import json
+from pprint import pprint
 from typing import Any, Dict, List, Union
 
 # TODO: Add docstrings
@@ -75,6 +76,8 @@ def parse_workout_string(workout_string: str) -> Dict[str, Any]:
             curr_exercise['sets'].append(curr_set)
         elif entry.startswith('Notes: '):
             exercises[-1]['notes'] = entry[7:]
+        elif entry.startswith('Workout Notes: '):
+            output_data['workout_notes'] = entry.split(':')[1][1:]
         elif entry == '' and curr_exercise != init_curr_exercise():
             exercises.append(curr_exercise)
             curr_exercise = init_curr_exercise()
@@ -87,11 +90,12 @@ def parse_workout_string(workout_string: str) -> Dict[str, Any]:
 
 
 def workouts_txt_to_json(txt_path: str, json_path: str):
-    print(os.listdir())
     all_workout_data = [
         parse_workout_string(file_to_string(f'{txt_path}/{workout_file}'))
-        for workout_file in sorted(os.listdir(txt_path))
+        for workout_file in sorted(os.listdir(txt_path), key=len)
     ]
+    print("Latest workout: \n")
+    pprint(all_workout_data[-1])
     print(f"Processed {len(all_workout_data)} workouts! Saving to json...")
     with open(json_path, 'w', encoding='utf-8') as output_file:
         json.dump(all_workout_data, output_file, ensure_ascii=False, indent=4, sort_keys=True)
