@@ -3,4 +3,5 @@ if [ "${ENVIRONMENT}" != "" ] && [ "${ENVIRONMENT}" == "local" ]
   then
     tail -f /dev/null
 fi
-python src/main.py
+exec python src/utils.py &
+exec streamlit run src/app.py

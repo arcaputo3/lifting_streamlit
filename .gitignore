@@ -1,4 +1,5 @@
 .idea
+*ipynb*
 *.pyc
 processed_data
 workouts

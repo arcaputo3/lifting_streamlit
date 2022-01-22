@@ -94,12 +94,47 @@ def workouts_txt_to_json(txt_path: str, json_path: str):
         parse_workout_string(file_to_string(f'{txt_path}/{workout_file}'))
         for workout_file in sorted(os.listdir(txt_path), key=len)
     ]
-    print("Latest workout: \n")
-    pprint(all_workout_data[-1])
     print(f"Processed {len(all_workout_data)} workouts! Saving to json...")
     with open(json_path, 'w', encoding='utf-8') as output_file:
         json.dump(all_workout_data, output_file, ensure_ascii=False, indent=4, sort_keys=True)
     print("Done!")
+
+
+def exercise_volume_map(data: List[Dict[str, int]]) -> List[int]:
+    return [
+        max(d.get('weight', 0), 1) * d.get('reps', 0)
+        for d in data
+    ]
+
+
+def epley_orm(data: List[Dict[str, int]]) -> List[float]:
+    return [
+        round(d.get('weight', 0) * (1 + d.get('reps', 0) / 30), 2)
+        if d.get('reps', 0) != 1 else round(d.get('weight', 0), 2)
+        for d in data
+    ]
+
+
+def mcglothin_orm(data: List[Dict[str, int]]) -> List[float]:
+    return [
+        round(d.get('weight', 0) * 100 / (101.3 - 2.67123 * d.get('reps', 0)), 2)
+        if d.get('reps', 0) != 1 else round(d.get('weight', 0), 2)
+        for d in data
+    ]
+
+
+def lombardi_orm(data: List[Dict[str, int]]) -> List[float]:
+    return [
+        round(d.get('weight', 0) * d.get('reps', 0) ** 0.1, 2)
+        if d.get('reps', 0) != 1 else round(d.get('weight', 0), 2)
+        for d in data
+    ]
+
+
+def safe_max(data: List[float]):
+    if not data:
+        return 0
+    return max(data)
 
 
 if __name__ == '__main__':

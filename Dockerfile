@@ -21,5 +21,6 @@ COPY . .
 RUN pipenv install
 RUN pipenv install --system
 
+EXPOSE 8501
 # CMD ["python", "src/analysis.py"]
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]

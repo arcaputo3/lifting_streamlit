@@ -5,16 +5,7 @@ import pandas as pd
 
 from typing import List, Dict
 
-# from main import *
-
-# TODO: Add utils.py
-
-def exercise_volume_map(data: List[Dict[str, int]]) -> List[int]:
-    return [
-        max(d.get('weight', 0), 1) * d.get('reps', 0)
-        for d in data
-    ]
-
+from utils import *
 
 with open('processed_data/workouts.json', 'r') as file:
     workout_json_data = json.load(file)
