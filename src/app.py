@@ -1,4 +1,5 @@
 import json
+from datetime import datetime
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -26,7 +27,39 @@ def plot_exercise_max(data: pd.DataFrame, exercise_name: str, max_column: str = 
     plt.xlabel("Training Date")
     plt.ylabel(f"Weight ({units})")
     plt.legend()
+    st.pyplot(fig=plt)
 
+
+def plot_top_n(data: pd.DataFrame, asof: str, top_n: int = 25, units: str = global_unit_selectbox):
+    top_n = 25
+    data = data.loc[:asof]
+    adjustment = (1 if units == 'LB' else 2.2)
+    volume_base = data['sets'].apply(exercise_volume_map).apply(sum).to_frame().rename(columns={'sets': 'volume'})
+    volume_base['name'] = data['name']
+    volume_base['date'] = data.index
+    volume = volume_base.groupby('name').sum() / adjustment
+    cumulative_volume = volume_base.groupby('date').sum() / adjustment
+    top_exercises = data.groupby('name')['sets'].count()
+    top_n_frequency = top_exercises.sort_values().iloc[-top_n:]
+    top_n_volume = volume.sort_values(by='volume').iloc[-top_n:]
+
+    top_n_frequency.plot(figsize=(10, 8), kind='barh')
+    plt.xlabel('Frequency')
+    plt.ylabel('Exercise')
+    plt.title(f'Top {top_n} Exercises by Workout Frequency')
+    st.pyplot(fig=plt)
+
+    top_n_volume.plot(figsize=(10, 8), kind='barh')
+    plt.xlabel(f'Volume ({units})')
+    plt.ylabel('Exercise')
+    plt.title(f'Top {top_n} Exercises by Volume')
+    st.pyplot(fig=plt)
+
+    cumulative_volume.cumsum().plot(figsize=(10, 8))
+    plt.title(f'Total Volume Over Time')
+    plt.xlabel('Date')
+    plt.ylabel(f'Volume ({units})')
+    st.pyplot(fig=plt)
 
 
 # workouts_txt_to_json('workouts', 'processed_data/workouts.json')
@@ -45,14 +78,6 @@ all_exercises['lombardi_orm'] = all_exercises['sets'].apply(lombardi_orm)
 for column in ['volume', 'epley_orm', 'mcglothin_orm', 'lombardi_orm']:
     all_exercises[column + '_max'] = all_exercises[column].apply(safe_max)
 
-top_n = 25
-adjustment = (1 if global_unit_selectbox == 'LB' else 2.2)
-volume = all_exercises['sets'].apply(exercise_volume_map).apply(sum).to_frame().set_index(all_exercises['name'])
-volume = volume.reset_index().groupby('name').sum() / adjustment
-top_exercises = all_exercises.groupby('name')['sets'].count()
-top_n_frequency = top_exercises.sort_values().iloc[-top_n:]
-top_n_volume = volume.sort_values(by='sets').iloc[-top_n:]
-
 add_selectbox = st.sidebar.selectbox(
     'Analysis Type',
     ('Total', 'By Exercise')
@@ -60,20 +85,14 @@ add_selectbox = st.sidebar.selectbox(
 st.title("Workout Log")
 
 if add_selectbox == 'Total':
-    top_n_frequency.plot(figsize=(10, 8), kind='barh')
-    plt.xlabel('Frequency')
-    plt.ylabel('Exercise')
-    plt.title(f'Top {top_n} Exercises by Workout Frequency')
-    st.pyplot(fig=plt)
-
-    top_n_volume.plot(figsize=(10, 8), kind='barh')
-    plt.xlabel(f'Volume ({global_unit_selectbox})')
-    plt.ylabel('Exercise')
-    plt.title(f'Top {top_n} Exercises by Volume')
-    st.pyplot(fig=plt)
+    start_time = st.slider(
+        "As of When?",
+        min_value=all_exercises.index[0].to_pydatetime(),
+        max_value=all_exercises.index[-1].to_pydatetime(),
+        format="MM/DD/YY")
+    plot_top_n(all_exercises, start_time)
 else:
     exercise = st.selectbox("Training Max Analysis", sorted(list(all_exercises['name'].unique())), index=5)
     plot_exercise_max(all_exercises, exercise)
-    st.pyplot(fig=plt)
 
 
