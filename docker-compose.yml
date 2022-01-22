@@ -4,5 +4,6 @@ services:
     build: .
     environment:
       MPLCONFIGDIR: /etc
+      ENVIRONMENT: local
     volumes:
       - ./:/app

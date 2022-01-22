@@ -6,11 +6,14 @@ RUN apt-get -y update && \
     apt-get -y install git unzip && \
     rm -rf /var/lib/apt/lists/*
 
-#Prepare a configuration file for Matplotlib.
+# Prepare a configuration file for Matplotlib.
 WORKDIR /etc
 RUN echo "backend : Agg" >> matplotlibrc
 
 RUN pip install pipenv
+
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
 
 WORKDIR /app
 COPY . .
@@ -18,4 +21,5 @@ COPY . .
 RUN pipenv install
 RUN pipenv install --system
 
-CMD ["python", "src/analysis.py"]
+# CMD ["python", "src/analysis.py"]
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
