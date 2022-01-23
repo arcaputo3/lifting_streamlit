@@ -115,17 +115,16 @@ def epley_orm(data: List[Dict[str, int]]) -> List[float]:
     ]
 
 
-def mcglothin_orm(data: List[Dict[str, int]]) -> List[float]:
+def lombardi_orm(data: List[Dict[str, int]]) -> List[float]:
     return [
-        round(d.get('weight', 0) * 100 / (101.3 - 2.67123 * d.get('reps', 0)), 2)
-        if d.get('reps', 0) != 1 else round(d.get('weight', 0), 2)
+        round(d.get('weight', 0) * d.get('reps', 0) ** 0.1, 2)
         for d in data
     ]
 
 
-def lombardi_orm(data: List[Dict[str, int]]) -> List[float]:
+def mcglothin_orm(data: List[Dict[str, int]]) -> List[float]:
     return [
-        round(d.get('weight', 0) * d.get('reps', 0) ** 0.1, 2)
+        round(d.get('weight', 0) * 100 / (101.3 - 2.67123 * d.get('reps', 0)), 2)
         if d.get('reps', 0) != 1 else round(d.get('weight', 0), 2)
         for d in data
     ]
