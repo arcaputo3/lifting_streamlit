@@ -1,7 +1,6 @@
 # This is a project for tracking, plotting, and optimizing workout progress
 import os
 import json
-from pprint import pprint
 from typing import Any, Dict, List, Union
 
 # TODO: Add docstrings
@@ -137,4 +136,6 @@ def safe_max(data: List[float]):
 
 
 if __name__ == '__main__':
+    if 'processed_data' not in os.listdir():
+        os.mkdir('processed_data')
     workouts_txt_to_json('workouts', 'processed_data/workouts.json')
