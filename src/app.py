@@ -56,7 +56,7 @@ def plot_top_n(data: pd.DataFrame, asof: str, top_n: int = 25, units: str = glob
     adjustment = (1 if units == 'LB' else 2.2)
     volume_base = data['sets'].apply(exercise_volume_map).apply(sum).to_frame().rename(columns={'sets': 'volume'})
     volume_base = volume_base[volume_base != 0]
-    rep_base = all_exercises['sets'].apply(
+    rep_base = data['sets'].apply(
         lambda x: [d.get('reps', 0) for d in x]
     ).apply(lambda x: sum(x) / len(x) if len(x) > 0 else 0)
     rep_base = rep_base[rep_base != 0]
@@ -160,9 +160,11 @@ all_exercises['total_volume'] = all_exercises['volume'].apply(sum)
 all_exercises['epley_orm'] = all_exercises['sets'].apply(epley_orm)
 all_exercises['mcglothin_orm'] = all_exercises['sets'].apply(mcglothin_orm)
 all_exercises['lombardi_orm'] = all_exercises['sets'].apply(lombardi_orm)
+
 for column in ['volume', 'epley_orm', 'mcglothin_orm', 'lombardi_orm']:
     all_exercises[column + '_max'] = all_exercises[column].apply(safe_max)
 
+all_exercises.to_csv('processed_data/all_exercises.csv')
 add_selectbox = st.sidebar.selectbox(
     'Analysis Type',
     ('Total', 'By Exercise', 'SBD Only', 'SBDO Only')
@@ -198,7 +200,6 @@ if add_selectbox == 'Total':
 
 elif add_selectbox == 'By Exercise':
     st.title("Individual Exercise Analysis")
-
     exercise_selected = st.selectbox("Training Max Analysis", sorted(list(all_exercises['name'].unique())), index=5)
     max_type = st.radio("1RM Calculation", sorted(max_type_lookup.keys()))
     plot_exercise_max(all_exercises, exercise_selected, max_type_lookup[max_type])

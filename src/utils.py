@@ -92,6 +92,7 @@ def workouts_txt_to_json(txt_path: str, json_path: str):
     all_workout_data = [
         parse_workout_string(file_to_string(f'{txt_path}/{workout_file}'))
         for workout_file in sorted(os.listdir(txt_path), key=len)
+        if workout_file.endswith('.txt')
     ]
     print(f"Processed {len(all_workout_data)} workouts! Saving to json...")
     with open(json_path, 'w', encoding='utf-8') as output_file:
