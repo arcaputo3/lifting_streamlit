@@ -49,7 +49,7 @@ Set 3: 25 lb × 10
 Watt Bike
 Set 1: 8 mi | 0:30
 ```
-Note the use of `×` vs. `x`!
+Note the use of `×` vs. `x`! Filenames can be whatever you want so long as they are each unique.
 
 ### Feature Requests
 You can open issues in this repo, but I ask that you please fork and create your own pull request if you would like features added. I will be adding features as I see fit, but likely very slowly...
