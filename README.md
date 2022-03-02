@@ -6,7 +6,7 @@ Project for analyzing workout data imported from Strong
 2. Clone this repo to your local machine by running `git clone https://github.com/arcaputo3/lifting_streamlit.git` or, create a fork and clone that (recommended)
 3. Download the [Strong App](https://www.strong.app/) to your smart phone and record your workouts there
 4. Download and install the latest version of [Docker](https://www.docker.com/) (4.5.1 as of writing this)
-5. Export workouts in `txt` format to `~/lifting_streamlit/workouts`. Here is a [guide](https://help.strongapp.io/article/109-share-workout-or-routine) - for best results, clone this repo to a cloud location accessible by your phone (using iCloud for instance)
+5. Export workouts in `.txt` format to `~/lifting_streamlit/workouts`. Here is a [guide](https://help.strongapp.io/article/109-share-workout-or-routine) - for best results, clone this repo to a cloud location accessible by your phone (using iCloud for instance)
 6. Navigate to the `~/lifting_streamlit` folder locally via terminal 
 7. Run `docker compose build`
 8. Run `docker compose up`
