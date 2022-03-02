@@ -2,7 +2,7 @@
 Project for analyzing workout data imported from Strong 
 
 ## Setup
-*Shift-click links to avoid navigating away from links.*
+*Shift-click links to avoid navigating away from this page.*
 1. Download and install [git](https://git-scm.com/)
 2. Clone this repo to your local machine by running `git clone https://github.com/arcaputo3/lifting_streamlit.git` or, create a fork and clone that (recommended)
 3. Download the [Strong App](https://www.strong.app/) to your smart phone and record your workouts there
