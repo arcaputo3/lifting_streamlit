@@ -3,3 +3,5 @@
 *.pyc
 processed_data
 workouts
+!processed_data/__init__.py
+!workouts/__init__.py
