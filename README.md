@@ -10,7 +10,7 @@ Project for analyzing workout data imported from Strong
 6. Navigate to the `~/lifting_streamlit` folder locally via terminal 
 7. Run `docker compose build`
 8. Run `docker compose up`
-9. Navigate to `https://localhost:8501` in your browser to view the dashboard!
+9. Navigate to https://localhost:8501 in your browser to view the dashboard!
 
 ### Exporting workouts without Strong App
 Workout files can be created manually! Example format:
